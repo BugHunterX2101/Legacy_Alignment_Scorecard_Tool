@@ -8,7 +8,7 @@ export const ScoreDistributionChart: React.FC<ScoreDistributionChartProps> = ({ 
   const maxCount = Math.max(...data.map(d => d.count));
 
   return (
-    <div className="bg-[#2A2D31] rounded-lg border border-gray-700 p-6">
+    <div className="bg-[#1E2328] rounded-lg border border-gray-700 p-6">
       <h3 className="text-lg font-semibold text-white mb-4">Score Distribution</h3>
       <div className="space-y-3">
         {data.map((item, index) => (

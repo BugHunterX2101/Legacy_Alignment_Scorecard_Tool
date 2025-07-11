@@ -7,7 +7,7 @@ interface TopIndustriesChartProps {
 
 export const TopIndustriesChart: React.FC<TopIndustriesChartProps> = ({ data }) => {
   return (
-    <div className="bg-[#2A2D31] rounded-lg border border-gray-700 p-6">
+    <div className="bg-[#1E2328] rounded-lg border border-gray-700 p-6">
       <h3 className="text-lg font-semibold text-white mb-4">Top Industries</h3>
       <div className="space-y-4">
         {data.map((industry, index) => (

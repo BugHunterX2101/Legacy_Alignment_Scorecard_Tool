@@ -23,7 +23,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({ lead, onSelect, onEnrich, is
 
   return (
     <div 
-      className={`bg-[#2A2D31] rounded-lg border transition-all duration-200 hover:border-gray-600 cursor-pointer ${
+      className={`bg-[#1E2328] rounded-lg border transition-all duration-200 hover:border-gray-600 cursor-pointer ${
         isSelected ? 'border-[#2563EB] ring-2 ring-blue-500/20' : 'border-gray-700'
       }`}
       onClick={() => onSelect(lead)}

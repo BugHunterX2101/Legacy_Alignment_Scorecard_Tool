@@ -21,7 +21,7 @@ import { SortAsc, SortDesc } from 'lucide-react';
 
 function App() {
   const { leads, loading, addLead, updateLead, enrichLead } = useLeads();
-  const [activeTab, setActiveTab] = useState<'home' | 'dashboard' | 'leads' | 'scraper' | 'enrichment' | 'analytics'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'dashboard' | 'leads' | 'scraper' | 'enrichment' | 'analytics' | 'search'>('home');
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'score' | 'name' | 'dateAdded'>('score');
@@ -156,7 +156,6 @@ function App() {
 
   const handleAdvancedSearch = (filters: any[], query: string) => {
     console.log('Advanced search:', { filters, query });
-    // Implement search logic here
     setActiveTab('leads');
   };
 
@@ -166,14 +165,14 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0F1419] flex items-center justify-center">
         <LoadingSpinner size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#1A1C1E] text-white">
+    <div className="min-h-screen bg-[#0F1419] text-white">
       {activeTab === 'home' ? (
         <HomePage 
           onNavigate={(tab) => setActiveTab(tab as any)}
@@ -181,263 +180,269 @@ function App() {
         />
       ) : (
         <>
-      <Sidebar 
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
-      
-      <div className="ml-64">
-        <TopBar 
-          onImport={() => setShowImport(true)}
-          onScrape={() => setShowScraper(true)}
-          onExport={handleExport}
-        />
-        
-        <main className="p-6">
-        {activeTab === 'search' && (
-          <div>
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-white mb-2">Advanced Lead Search</h1>
-              <p className="text-gray-400">Find qualified prospects with precision targeting</p>
-            </div>
-            <AdvancedSearch 
-              onSearch={handleAdvancedSearch}
-              onResultsCount={handleResultsCount}
+          <Sidebar 
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
+          
+          <div className="ml-64">
+            <TopBar 
+              onImport={() => setShowImport(true)}
+              onScrape={() => setShowScraper(true)}
+              onExport={handleExport}
             />
-          </div>
-        )}
-
-        {activeTab === 'dashboard' && (
-          <div>
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-white mb-2">Lead Intelligence Dashboard</h1>
-              <p className="text-gray-400">AI-powered lead scoring and qualification for SaasquatchLeads</p>
-            </div>
-            <DashboardStats stats={dashboardStats} />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <ScoreDistributionChart data={scoreDistribution} />
-              <TopIndustriesChart data={topIndustries} />
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'leads' && (
-          <div>
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-4">
+            
+            <main className="p-6">
+              {activeTab === 'search' && (
                 <div>
-                  <h2 className="text-2xl font-bold text-white">Qualified Leads ({filteredLeads.length})</h2>
-                  <p className="text-gray-400">AI-scored prospects ready for outreach</p>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <LeadFilters 
-                    filters={filters}
-                    onFiltersChange={setFilters}
-                    isOpen={showFilters}
-                    onToggle={() => setShowFilters(!showFilters)}
+                  <div className="mb-8">
+                    <h1 className="text-3xl font-bold text-white mb-2">Advanced Lead Search</h1>
+                    <p className="text-gray-400">Find qualified prospects with precision targeting</p>
+                  </div>
+                  <AdvancedSearch 
+                    onSearch={handleAdvancedSearch}
+                    onResultsCount={handleResultsCount}
                   />
-                  <div className="flex items-center space-x-2">
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as any)}
-                      className="px-3 py-2 bg-[#2A2D31] border border-gray-600 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="score">AI Score</option>
-                      <option value="name">Name</option>
-                      <option value="dateAdded">Date Added</option>
-                    </select>
-                    <button
-                      onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                      className="p-2 bg-[#2A2D31] border border-gray-600 rounded-lg hover:bg-[#3A3D41] transition-colors"
-                    >
-                      {sortOrder === 'asc' ? <SortAsc className="w-4 h-4 text-white" /> : <SortDesc className="w-4 h-4 text-white" />}
-                    </button>
+                </div>
+              )}
+
+              {activeTab === 'dashboard' && (
+                <div>
+                  <div className="mb-8">
+                    <h1 className="text-3xl font-bold text-white mb-2">Lead Intelligence Dashboard</h1>
+                    <p className="text-gray-400">AI-powered lead scoring and qualification for SaasquatchLeads</p>
+                  </div>
+                  <DashboardStats stats={dashboardStats} />
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <ScoreDistributionChart data={scoreDistribution} />
+                    <TopIndustriesChart data={topIndustries} />
                   </div>
                 </div>
-              </div>
+              )}
 
-              <SearchDropdown
-                value={searchTerm}
-                onChange={setSearchTerm}
-                placeholder="Search leads by name, company, email, position..."
-                suggestions={getLeadSearchSuggestions()}
-                onSuggestionSelect={(suggestion) => setSearchTerm(suggestion)}
-              />
-            </div>
+              {activeTab === 'leads' && (
+                <div>
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h2 className="text-2xl font-bold text-white">Qualified Leads ({filteredLeads.length})</h2>
+                        <p className="text-gray-400">AI-scored prospects ready for outreach</p>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <LeadFilters 
+                          filters={filters}
+                          onFiltersChange={setFilters}
+                          isOpen={showFilters}
+                          onToggle={() => setShowFilters(!showFilters)}
+                        />
+                        <div className="flex items-center space-x-2">
+                          <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value as any)}
+                            className="px-3 py-2 bg-[#1E2328] border border-gray-600 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            <option value="score">AI Score</option>
+                            <option value="name">Name</option>
+                            <option value="dateAdded">Date Added</option>
+                          </select>
+                          <button
+                            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                            className="p-2 bg-[#1E2328] border border-gray-600 rounded-lg hover:bg-[#2A2D31] transition-colors"
+                          >
+                            {sortOrder === 'asc' ? <SortAsc className="w-4 h-4 text-white" /> : <SortDesc className="w-4 h-4 text-white" />}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredLeads.map((lead) => (
-                <LeadCard 
-                  key={lead.id}
-                  lead={lead}
-                  onSelect={setSelectedLead}
-                  onEnrich={(id) => enrichLead(id)}
-                  isSelected={selectedLead?.id === lead.id}
-                />
-              ))}
-            </div>
+                    <SearchDropdown
+                      value={searchTerm}
+                      onChange={setSearchTerm}
+                      placeholder="Search leads by name, company, email, position..."
+                      suggestions={getLeadSearchSuggestions()}
+                      onSuggestionSelect={(suggestion) => setSearchTerm(suggestion)}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredLeads.map((lead) => (
+                      <LeadCard 
+                        key={lead.id}
+                        lead={lead}
+                        onSelect={setSelectedLead}
+                        onEnrich={(id) => enrichLead(id)}
+                        isSelected={selectedLead?.id === lead.id}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'scraper' && (
+                <div className="bg-[#1E2328] rounded-lg border border-gray-700 p-6">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-bold text-white mb-2">Lead Scraping Engine</h2>
+                    <p className="text-gray-400">Extract qualified leads from LinkedIn, company websites, and directories</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div className="p-6 bg-gradient-to-br from-blue-900/20 to-blue-800/20 rounded-lg border border-blue-700/30">
+                      <div className="flex items-center mb-3">
+                        <div className="p-2 bg-[#2563EB] rounded-lg mr-3">
+                          <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                          </svg>
+                        </div>
+                        <h3 className="font-semibold text-white">LinkedIn Scraper</h3>
+                      </div>
+                      <p className="text-sm text-gray-300 mb-4">Extract profiles from LinkedIn Sales Navigator searches</p>
+                      <button 
+                        onClick={() => setShowScraper(true)}
+                        className="w-full px-4 py-2 bg-[#2563EB] text-white rounded-lg hover:bg-blue-600 transition-colors"
+                      >
+                        Start LinkedIn Scrape
+                      </button>
+                    </div>
+
+                    <div className="p-6 bg-gradient-to-br from-green-900/20 to-green-800/20 rounded-lg border border-green-700/30">
+                      <div className="flex items-center mb-3">
+                        <div className="p-2 bg-[#22C55E] rounded-lg mr-3">
+                          <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                          </svg>
+                        </div>
+                        <h3 className="font-semibold text-white">Company Directory</h3>
+                      </div>
+                      <p className="text-sm text-gray-300 mb-4">Scrape employee data from company websites</p>
+                      <button className="w-full px-4 py-2 bg-[#22C55E] text-white rounded-lg hover:bg-green-600 transition-colors">
+                        Scrape Company
+                      </button>
+                    </div>
+
+                    <div className="p-6 bg-gradient-to-br from-purple-900/20 to-purple-800/20 rounded-lg border border-purple-700/30">
+                      <div className="flex items-center mb-3">
+                        <div className="p-2 bg-[#6366F1] rounded-lg mr-3">
+                          <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                          </svg>
+                        </div>
+                        <h3 className="font-semibold text-white">Industry Lists</h3>
+                      </div>
+                      <p className="text-sm text-gray-300 mb-4">Extract from industry-specific directories</p>
+                      <button className="w-full px-4 py-2 bg-[#6366F1] text-white rounded-lg hover:bg-indigo-600 transition-colors">
+                        Browse Industries
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="bg-[#0F1419] rounded-lg p-6 border border-gray-700">
+                    <h3 className="font-semibold text-white mb-4">Recent Scraping Activity</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between p-3 bg-[#1E2328] rounded-lg border border-gray-700">
+                        <div>
+                          <p className="font-medium text-white">LinkedIn Sales Navigator - Tech CEOs</p>
+                          <p className="text-sm text-gray-400">Completed 2 hours ago • 47 leads extracted</p>
+                        </div>
+                        <span className="px-3 py-1 bg-green-900/30 text-green-400 rounded-full text-sm">Completed</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-[#1E2328] rounded-lg border border-gray-700">
+                        <div>
+                          <p className="font-medium text-white">Apollo.io - Marketing Directors</p>
+                          <p className="text-sm text-gray-400">Completed 5 hours ago • 23 leads extracted</p>
+                        </div>
+                        <span className="px-3 py-1 bg-green-900/30 text-green-400 rounded-full text-sm">Completed</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'enrichment' && (
+                <EnrichmentPanel leads={filteredLeads} onEnrich={enrichLead} />
+              )}
+
+              {activeTab === 'analytics' && (
+                <div className="bg-[#1E2328] rounded-lg border border-gray-700 p-6">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-bold text-white mb-2">Lead Intelligence Analytics</h2>
+                    <p className="text-gray-400">Advanced insights and performance metrics</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div className="p-6 bg-gradient-to-br from-indigo-900/20 to-indigo-800/20 rounded-lg border border-indigo-700/30">
+                      <h3 className="font-semibold text-white mb-4">Conversion Funnel</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-300">Total Scraped</span>
+                          <span className="font-bold text-white">1,247</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-300">AI Qualified (80+)</span>
+                          <span className="font-bold text-white">312</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-300">Contacted</span>
+                          <span className="font-bold text-white">89</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-300">Responded</span>
+                          <span className="font-bold text-white">23</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-6 bg-gradient-to-br from-teal-900/20 to-teal-800/20 rounded-lg border border-teal-700/30">
+                      <h3 className="font-semibold text-white mb-4">Source Performance</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-300">LinkedIn</span>
+                          <span className="font-bold text-white">87% quality</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-300">Apollo.io</span>
+                          <span className="font-bold text-white">72% quality</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-300">Company Sites</span>
+                          <span className="font-bold text-white">94% quality</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-[#0F1419] rounded-lg p-6 border border-gray-700">
+                    <h3 className="font-semibold text-white mb-4">AI Scoring Insights</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div className="p-4 bg-[#1E2328] rounded-lg border border-gray-700">
+                        <h4 className="font-medium text-white mb-2">Top Scoring Factors</h4>
+                        <ul className="text-sm text-gray-300 space-y-1">
+                          <li>• C-level positions (+25 points)</li>
+                          <li>• Tech industry (+20 points)</li>
+                          <li>• 100-500 employees (+15 points)</li>
+                        </ul>
+                      </div>
+                      <div className="p-4 bg-[#1E2328] rounded-lg border border-gray-700">
+                        <h4 className="font-medium text-white mb-2">Negative Indicators</h4>
+                        <ul className="text-sm text-gray-300 space-y-1">
+                          <li>• No LinkedIn profile (-15 points)</li>
+                          <li>• Generic email (-10 points)</li>
+                          <li>• Startup stage (-8 points)</li>
+                        </ul>
+                      </div>
+                      <div className="p-4 bg-[#1E2328] rounded-lg border border-gray-700">
+                        <h4 className="font-medium text-white mb-2">Recommendations</h4>
+                        <ul className="text-sm text-gray-300 space-y-1">
+                          <li>• Focus on SaaS companies</li>
+                          <li>• Target VP+ positions</li>
+                          <li>• Prioritize warm introductions</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </main>
           </div>
-        )}
-
-        {activeTab === 'scraper' && (
-          <div className="bg-[#2A2D31] rounded-lg border border-gray-700 p-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-white mb-2">Lead Scraping Engine</h2>
-              <p className="text-gray-400">Extract qualified leads from LinkedIn, company websites, and directories</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="p-6 bg-gradient-to-br from-blue-900/20 to-blue-800/20 rounded-lg border border-blue-700/30">
-                <div className="flex items-center mb-3">
-                  <div className="p-2 bg-[#2563EB] rounded-lg mr-3">
-                    <Zap className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-white">LinkedIn Scraper</h3>
-                </div>
-                <p className="text-sm text-gray-300 mb-4">Extract profiles from LinkedIn Sales Navigator searches</p>
-                <button 
-                  onClick={() => setShowScraper(true)}
-                  className="w-full px-4 py-2 bg-[#2563EB] text-white rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  Start LinkedIn Scrape
-                </button>
-              </div>
-
-              <div className="p-6 bg-gradient-to-br from-green-900/20 to-green-800/20 rounded-lg border border-green-700/30">
-                <div className="flex items-center mb-3">
-                  <div className="p-2 bg-[#22C55E] rounded-lg mr-3">
-                    <Zap className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-white">Company Directory</h3>
-                </div>
-                <p className="text-sm text-gray-300 mb-4">Scrape employee data from company websites</p>
-                <button className="w-full px-4 py-2 bg-[#22C55E] text-white rounded-lg hover:bg-green-600 transition-colors">
-                  Scrape Company
-                </button>
-              </div>
-
-              <div className="p-6 bg-gradient-to-br from-purple-900/20 to-purple-800/20 rounded-lg border border-purple-700/30">
-                <div className="flex items-center mb-3">
-                  <div className="p-2 bg-[#6366F1] rounded-lg mr-3">
-                    <Zap className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-white">Industry Lists</h3>
-                </div>
-                <p className="text-sm text-gray-300 mb-4">Extract from industry-specific directories</p>
-                <button className="w-full px-4 py-2 bg-[#6366F1] text-white rounded-lg hover:bg-indigo-600 transition-colors">
-                  Browse Industries
-                </button>
-              </div>
-            </div>
-
-            <div className="bg-[#1A1C1E] rounded-lg p-6 border border-gray-700">
-              <h3 className="font-semibold text-white mb-4">Recent Scraping Activity</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-[#2A2D31] rounded-lg border border-gray-700">
-                  <div>
-                    <p className="font-medium text-white">LinkedIn Sales Navigator - Tech CEOs</p>
-                    <p className="text-sm text-gray-400">Completed 2 hours ago • 47 leads extracted</p>
-                  </div>
-                  <span className="px-3 py-1 bg-green-900/30 text-green-400 rounded-full text-sm">Completed</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-[#2A2D31] rounded-lg border border-gray-700">
-                  <div>
-                    <p className="font-medium text-white">Apollo.io - Marketing Directors</p>
-                    <p className="text-sm text-gray-400">Completed 5 hours ago • 23 leads extracted</p>
-                  </div>
-                  <span className="px-3 py-1 bg-green-900/30 text-green-400 rounded-full text-sm">Completed</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'enrichment' && (
-          <EnrichmentPanel leads={filteredLeads} onEnrich={enrichLead} />
-        )}
-
-        {activeTab === 'analytics' && (
-          <div className="bg-[#2A2D31] rounded-lg border border-gray-700 p-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-white mb-2">Lead Intelligence Analytics</h2>
-              <p className="text-gray-400">Advanced insights and performance metrics</p>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-              <div className="p-6 bg-gradient-to-br from-indigo-900/20 to-indigo-800/20 rounded-lg border border-indigo-700/30">
-                <h3 className="font-semibold text-white mb-4">Conversion Funnel</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">Total Scraped</span>
-                    <span className="font-bold text-white">1,247</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">AI Qualified (80+)</span>
-                    <span className="font-bold text-white">312</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">Contacted</span>
-                    <span className="font-bold text-white">89</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">Responded</span>
-                    <span className="font-bold text-white">23</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-6 bg-gradient-to-br from-teal-900/20 to-teal-800/20 rounded-lg border border-teal-700/30">
-                <h3 className="font-semibold text-white mb-4">Source Performance</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">LinkedIn</span>
-                    <span className="font-bold text-white">87% quality</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">Apollo.io</span>
-                    <span className="font-bold text-white">72% quality</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">Company Sites</span>
-                    <span className="font-bold text-white">94% quality</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-[#1A1C1E] rounded-lg p-6 border border-gray-700">
-              <h3 className="font-semibold text-white mb-4">AI Scoring Insights</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="p-4 bg-[#2A2D31] rounded-lg border border-gray-700">
-                  <h4 className="font-medium text-white mb-2">Top Scoring Factors</h4>
-                  <ul className="text-sm text-gray-300 space-y-1">
-                    <li>• C-level positions (+25 points)</li>
-                    <li>• Tech industry (+20 points)</li>
-                    <li>• 100-500 employees (+15 points)</li>
-                  </ul>
-                </div>
-                <div className="p-4 bg-[#2A2D31] rounded-lg border border-gray-700">
-                  <h4 className="font-medium text-white mb-2">Negative Indicators</h4>
-                  <ul className="text-sm text-gray-300 space-y-1">
-                    <li>• No LinkedIn profile (-15 points)</li>
-                    <li>• Generic email (-10 points)</li>
-                    <li>• Startup stage (-8 points)</li>
-                  </ul>
-                </div>
-                <div className="p-4 bg-[#2A2D31] rounded-lg border border-gray-700">
-                  <h4 className="font-medium text-white mb-2">Recommendations</h4>
-                  <ul className="text-sm text-gray-300 space-y-1">
-                    <li>• Focus on SaaS companies</li>
-                    <li>• Target VP+ positions</li>
-                    <li>• Prioritize warm introductions</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        </main>
-      </div>
         </>
       )}
 

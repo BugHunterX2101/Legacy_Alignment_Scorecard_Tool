@@ -95,7 +95,7 @@ export const SearchDropdown: React.FC<SearchDropdownProps> = ({
           onChange={handleInputChange}
           onFocus={handleInputFocus}
           placeholder={placeholder}
-              className="w-full pl-10 pr-10 py-2 bg-[#2A2D31] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
+              className="w-full pl-10 pr-10 py-2 bg-[#0F1419] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
         />
         {value && (
           <button
@@ -108,7 +108,7 @@ export const SearchDropdown: React.FC<SearchDropdownProps> = ({
       </div>
 
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1 bg-[#2A2D31] border border-gray-600 rounded-lg shadow-lg max-h-64 overflow-y-auto">
+        <div className="absolute z-50 w-full mt-1 bg-[#1E2328] border border-gray-600 rounded-lg shadow-lg max-h-64 overflow-y-auto">
           {isLoading && (
             <div className="px-4 py-2 text-sm text-gray-400 flex items-center">
               <div className="w-4 h-4 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin mr-2"></div>

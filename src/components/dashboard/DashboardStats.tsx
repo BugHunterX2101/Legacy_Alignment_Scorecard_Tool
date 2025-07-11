@@ -53,7 +53,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {statItems.map((item, index) => (
-        <div key={index} className="bg-[#2A2D31] rounded-lg border border-gray-700 p-6 hover:border-gray-600 transition-colors">
+        <div key={index} className="bg-[#1E2328] rounded-lg border border-gray-700 p-6 hover:border-gray-600 transition-colors">
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-sm font-medium text-gray-400">{item.label}</p>
