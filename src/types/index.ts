@@ -10,6 +10,7 @@ export interface Lead {
   location: string;
   linkedin?: string;
   phone?: string;
+  website?: string;
   source: string;
   dateAdded: string;
   score: number;

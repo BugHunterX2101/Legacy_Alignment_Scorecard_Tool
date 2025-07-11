@@ -2,7 +2,7 @@ import React from 'react';
 import { Lead } from '../../types';
 import { ScoreCircle } from '../common/ScoreCircle';
 import { StatusBadge } from '../common/StatusBadge';
-import { Building, MapPin, Calendar, Mail, Phone, Linkedin, Zap } from 'lucide-react';
+import { Building, MapPin, Calendar, Mail, Phone, Linkedin, Zap, ExternalLink } from 'lucide-react';
 
 interface LeadCardProps {
   lead: Lead;
@@ -70,6 +70,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({ lead, onSelect, onEnrich, is
                 href={`mailto:${lead.email}`}
                 className="text-gray-500 hover:text-[#2563EB] transition-colors"
                 onClick={(e) => e.stopPropagation()}
+                title={`Email ${lead.name}`}
               >
                 <Mail className="w-4 h-4" />
               </a>
@@ -79,6 +80,7 @@ export const LeadCard: React.FC<LeadCardProps> = ({ lead, onSelect, onEnrich, is
                 href={`tel:${lead.phone}`}
                 className="text-gray-500 hover:text-[#2563EB] transition-colors"
                 onClick={(e) => e.stopPropagation()}
+                title={`Call ${lead.name}`}
               >
                 <Phone className="w-4 h-4" />
               </a>
@@ -90,8 +92,21 @@ export const LeadCard: React.FC<LeadCardProps> = ({ lead, onSelect, onEnrich, is
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-[#2563EB] transition-colors"
                 onClick={(e) => e.stopPropagation()}
+                title={`View ${lead.name}'s LinkedIn`}
               >
                 <Linkedin className="w-4 h-4" />
+              </a>
+            )}
+            {lead.website && (
+              <a 
+                href={lead.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-[#2563EB] transition-colors"
+                onClick={(e) => e.stopPropagation()}
+                title={`Visit ${lead.company} website`}
+              >
+                <ExternalLink className="w-4 h-4" />
               </a>
             )}
           </div>

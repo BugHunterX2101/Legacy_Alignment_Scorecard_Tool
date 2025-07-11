@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, Upload, Zap, Search, Bell, Settings, User, Plus } from 'lucide-react';
+import { Download, Upload, Zap, Search, Bell, Settings, User, Plus, Phone, Mail } from 'lucide-react';
 
 interface TopBarProps {
   onImport: () => void;
@@ -8,6 +8,16 @@ interface TopBarProps {
 }
 
 export const TopBar: React.FC<TopBarProps> = ({ onImport, onScrape, onExport }) => {
+  const openDialer = () => {
+    // Open system dialer or phone app
+    window.open('tel:+1-800-LEADS-NOW');
+  };
+
+  const openEmailClient = () => {
+    // Open email client with pre-filled support email
+    window.open('mailto:support@saasquatchleads.com?subject=Lead Generation Support');
+  };
+
   return (
     <header className="bg-[#1E2328] border-b border-gray-700 px-6 py-4">
       <div className="flex items-center justify-between">
@@ -25,6 +35,24 @@ export const TopBar: React.FC<TopBarProps> = ({ onImport, onScrape, onExport }) 
         
         {/* Action Buttons */}
         <div className="flex items-center space-x-3 ml-6">
+          <button
+            onClick={openEmailClient}
+            className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            title="Contact Support"
+          >
+            <Mail className="w-4 h-4 mr-2" />
+            Support
+          </button>
+          
+          <button
+            onClick={openDialer}
+            className="flex items-center px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            title="Call Sales"
+          >
+            <Phone className="w-4 h-4 mr-2" />
+            Call Sales
+          </button>
+          
           <button
             onClick={onScrape}
             className="flex items-center px-4 py-2 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg"

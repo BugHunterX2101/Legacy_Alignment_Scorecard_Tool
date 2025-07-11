@@ -37,32 +37,36 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
           // Generate mock scraped leads
           const mockLeads = [
             {
-              name: 'Alex Thompson',
-              email: 'alex.thompson@techstartup.com',
-              company: 'TechStartup Inc',
-              position: 'VP of Sales',
+              name: 'Reid Hoffman',
+              email: 'reid@linkedin.com',
+              company: 'LinkedIn',
+              position: 'Co-founder',
               industry: 'Technology',
-              companySize: '51-100',
-              revenue: '$5M-$10M',
+              companySize: '5000+',
+              revenue: '$500M+',
               location: 'San Francisco, CA',
-              linkedin: 'linkedin.com/in/alexthompson',
+              linkedin: 'https://www.linkedin.com/in/reidhoffman/',
+              phone: '+1 (650) 687-3600',
+              website: 'https://www.linkedin.com',
               source: 'LinkedIn Scraper',
               status: 'new',
-              tags: ['scraped', 'high-potential']
+              tags: ['scraped', 'founder', 'high-value']
             },
             {
-              name: 'Maria Garcia',
-              email: 'maria.garcia@innovatecorp.com',
-              company: 'InnovateCorp',
-              position: 'Chief Marketing Officer',
+              name: 'Drew Houston',
+              email: 'drew@dropbox.com',
+              company: 'Dropbox',
+              position: 'CEO',
               industry: 'Technology',
-              companySize: '101-500',
-              revenue: '$10M-$50M',
-              location: 'Austin, TX',
-              linkedin: 'linkedin.com/in/mariagarcia',
+              companySize: '1001-5000',
+              revenue: '$100M-$500M',
+              location: 'San Francisco, CA',
+              linkedin: 'https://www.linkedin.com/in/drewhouston/',
+              phone: '+1 (415) 857-6800',
+              website: 'https://www.dropbox.com',
               source: 'LinkedIn Scraper',
               status: 'new',
-              tags: ['scraped', 'c-level']
+              tags: ['scraped', 'ceo', 'cloud-storage']
             }
           ];
           

@@ -131,7 +131,7 @@ function App() {
 
   const handleExport = () => {
     const csvContent = [
-      ['Name', 'Email', 'Company', 'Position', 'Industry', 'Score', 'Status', 'LinkedIn', 'Phone'],
+      ['Name', 'Email', 'Company', 'Position', 'Industry', 'Score', 'Status', 'LinkedIn', 'Phone', 'Website'],
       ...filteredLeads.map(lead => [
         lead.name,
         lead.email,
@@ -141,7 +141,8 @@ function App() {
         lead.score,
         lead.status,
         lead.linkedin || '',
-        lead.phone || ''
+        lead.phone || '',
+        lead.website || ''
       ])
     ].map(row => row.join(',')).join('\n');
     

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Lead } from '../../types';
 import { ScoreCircle } from '../common/ScoreCircle';
 import { StatusBadge } from '../common/StatusBadge';
-import { Building, MapPin, Calendar, Mail, Phone, Linkedin, Target, TrendingUp, Edit3, Save, X } from 'lucide-react';
+import { Building, MapPin, Calendar, Mail, Phone, Linkedin, Target, TrendingUp, Edit3, Save, X, ExternalLink, Copy, CheckCircle } from 'lucide-react';
 
 interface LeadDetailProps {
   lead: Lead;
@@ -13,6 +13,7 @@ interface LeadDetailProps {
 export const LeadDetail: React.FC<LeadDetailProps> = ({ lead, onClose, onUpdate }) => {
   const [editing, setEditing] = useState(false);
   const [editedLead, setEditedLead] = useState(lead);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
   const alignmentFactors = [
     { key: 'industry', label: 'Industry Fit', value: lead.alignment.industry, weight: '25%' },
@@ -91,6 +92,21 @@ export const LeadDetail: React.FC<LeadDetailProps> = ({ lead, onClose, onUpdate 
     onUpdate(updates);
   };
 
+  const copyToClipboard = async (text: string, field: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  const openEmailClient = (email: string, name: string, company: string) => {
+    const subject = encodeURIComponent(`Partnership Opportunity - ${company}`);
+    const body = encodeURIComponent(`Hi ${name.split(' ')[0]},\n\nI hope this email finds you well. I came across your profile and was impressed by your work at ${company}.\n\nI'd love to discuss a potential partnership opportunity that could benefit ${company}.\n\nWould you be available for a brief call this week?\n\nBest regards,\n[Your Name]`);
+    window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+  };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-5xl w-full max-h-[90vh] overflow-y-auto m-4">
@@ -187,23 +203,54 @@ export const LeadDetail: React.FC<LeadDetailProps> = ({ lead, onClose, onUpdate 
               <div className="space-y-3">
                 <div className="flex items-center text-sm">
                   <Mail className="w-4 h-4 mr-3 text-gray-400" />
-                  <a href={`mailto:${lead.email}`} className="text-blue-600 hover:text-blue-700">
-                    {lead.email}
-                  </a>
+                  <div className="flex items-center flex-1">
+                    <button
+                      onClick={() => openEmailClient(lead.email, lead.name, lead.company)}
+                      className="text-blue-600 hover:text-blue-700 mr-2"
+                    >
+                      {lead.email}
+                    </button>
+                    <button
+                      onClick={() => copyToClipboard(lead.email, 'email')}
+                      className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+                      title="Copy email"
+                    >
+                      {copiedField === 'email' ? <CheckCircle className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
+                    </button>
+                  </div>
                 </div>
                 {lead.phone && (
                   <div className="flex items-center text-sm">
                     <Phone className="w-4 h-4 mr-3 text-gray-400" />
-                    <a href={`tel:${lead.phone}`} className="text-blue-600 hover:text-blue-700">
-                      {lead.phone}
-                    </a>
+                    <div className="flex items-center flex-1">
+                      <a href={`tel:${lead.phone}`} className="text-blue-600 hover:text-blue-700 mr-2">
+                        {lead.phone}
+                      </a>
+                      <button
+                        onClick={() => copyToClipboard(lead.phone, 'phone')}
+                        className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+                        title="Copy phone"
+                      >
+                        {copiedField === 'phone' ? <CheckCircle className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
+                      </button>
+                    </div>
                   </div>
                 )}
                 {lead.linkedin && (
                   <div className="flex items-center text-sm">
                     <Linkedin className="w-4 h-4 mr-3 text-gray-400" />
-                    <a href={lead.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700">
+                    <a href={lead.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 flex items-center">
                       LinkedIn Profile
+                      <ExternalLink className="w-3 h-3 ml-1" />
+                    </a>
+                  </div>
+                )}
+                {lead.website && (
+                  <div className="flex items-center text-sm">
+                    <ExternalLink className="w-4 h-4 mr-3 text-gray-400" />
+                    <a href={lead.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 flex items-center">
+                      Company Website
+                      <ExternalLink className="w-3 h-3 ml-1" />
                     </a>
                   </div>
                 )}
@@ -211,10 +258,62 @@ export const LeadDetail: React.FC<LeadDetailProps> = ({ lead, onClose, onUpdate 
             </div>
 
             <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Quick Actions</h3>
+              <div className="space-y-2">
+                <button
+                  onClick={() => openEmailClient(lead.email, lead.name, lead.company)}
+                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Send Email
+                </button>
+                {lead.phone && (
+                  <a
+                    href={`tel:${lead.phone}`}
+                    className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    Call Now
+                  </a>
+                )}
+                {lead.linkedin && (
+                  <a
+                    href={lead.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
+                  >
+                    <Linkedin className="w-4 h-4 mr-2" />
+                    View LinkedIn
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Company Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Company Details</h3>
               <div className="space-y-3">
                 <div className="flex items-center text-sm text-gray-600">
                   <Building className="w-4 h-4 mr-3 text-gray-400" />
+                  <div className="flex items-center">
+                    {lead.email}
+                    {lead.website && (
+                      <a
+                        href={lead.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-2 text-blue-600 hover:text-blue-700"
+                        title="Visit company website"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
                   {lead.industry} • {lead.companySize} employees
                 </div>
                 <div className="flex items-center text-sm text-gray-600">
@@ -228,6 +327,26 @@ export const LeadDetail: React.FC<LeadDetailProps> = ({ lead, onClose, onUpdate 
                 <div className="flex items-center text-sm text-gray-600">
                   <Calendar className="w-4 h-4 mr-3 text-gray-400" />
                   Source: {lead.source}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Engagement History</h3>
+              <div className="space-y-2">
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-gray-700">Last Activity</span>
+                    <span className="text-xs text-gray-500">2 days ago</span>
+                  </div>
+                  <p className="text-xs text-gray-600">Viewed company website</p>
+                </div>
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-gray-700">Email Opened</span>
+                    <span className="text-xs text-gray-500">1 week ago</span>
+                  </div>
+                  <p className="text-xs text-gray-600">Opened welcome email sequence</p>
                 </div>
               </div>
             </div>
