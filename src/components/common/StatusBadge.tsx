@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface StatusBadgeProps {
-  status: 'new' | 'qualified' | 'unqualified' | 'contacted' | 'converted';
+  status: 'new' | 'qualified' | 'unqualified' | 'contacted' | 'converted' | 'hot' | 'warm' | 'cold';
   size?: 'sm' | 'md';
 }
 
@@ -36,6 +36,21 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' })
       bg: 'bg-purple-100',
       text: 'text-purple-800',
       label: 'Converted'
+    },
+    hot: {
+      bg: 'bg-red-100',
+      text: 'text-red-800',
+      label: 'Hot'
+    },
+    warm: {
+      bg: 'bg-orange-100',
+      text: 'text-orange-800',
+      label: 'Warm'
+    },
+    cold: {
+      bg: 'bg-gray-100',
+      text: 'text-gray-800',
+      label: 'Cold'
     }
   };
 

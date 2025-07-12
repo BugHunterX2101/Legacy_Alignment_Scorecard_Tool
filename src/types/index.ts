@@ -14,7 +14,7 @@ export interface Lead {
   source: string;
   dateAdded: string;
   score: number;
-  status: 'new' | 'qualified' | 'unqualified' | 'contacted' | 'converted';
+  status: 'new' | 'qualified' | 'unqualified' | 'contacted' | 'converted' | 'hot' | 'warm' | 'cold';
   tags: string[];
   notes?: string;
   alignment: {
