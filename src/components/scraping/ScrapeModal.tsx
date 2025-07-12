@@ -23,6 +23,11 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
     jobTitle: '',
     revenue: ''
   });
+  
+  // Check if required fields are filled
+  const hasRequiredFields = searchQuery.trim() !== '' && 
+                           filters.industry !== '' && 
+                           filters.companySize !== '';
 
   if (!isOpen) return null;
 
@@ -235,6 +240,11 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
   ];
 
   const filterLeads = (leads: any[]) => {
+    // If required fields are not filled, return empty array
+    if (!hasRequiredFields) {
+      return [];
+    }
+    
     return leads.filter(lead => {
       const matchesQuery = !searchQuery || 
         lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -476,7 +486,8 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
           </div>
 
           {/* Results Preview */}
-          <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          {hasRequiredFields && (
+            <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <div className="flex items-center justify-between mb-3">
               <h4 className="font-medium text-blue-900">Potential Results Preview</h4>
               <span className="text-sm text-blue-700">{potentialResults.length} leads found</span>
@@ -519,8 +530,36 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
                   </div>
                 ))}
               </div>
+            ) : (
+              <div className="text-center py-8">
+                <div className="text-gray-500 mb-2">
+                  <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                </div>
+                <p className="text-gray-600 font-medium">No leads match your current criteria</p>
+                <p className="text-sm text-gray-500">Try adjusting your search filters to find more results</p>
+              </div>
             )}
-          </div>
+            </div>
+          )}
+          
+          {!hasRequiredFields && (
+            <div className="mb-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+              <div className="flex items-center mb-2">
+                <div className="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center mr-3">
+                  <span className="text-white text-xs font-bold">!</span>
+                </div>
+                <h4 className="font-medium text-yellow-900">Complete Search Configuration</h4>
+              </div>
+              <p className="text-sm text-yellow-700 ml-8">
+                Please fill in the required fields to see potential leads:
+              </p>
+              <ul className="text-sm text-yellow-700 ml-12 mt-2 space-y-1">
+                {!searchQuery.trim() && <li>• Search Keywords</li>}
+                {!filters.industry && <li>• Industry</li>}
+                {!filters.companySize && <li>• Company Size</li>}
+              </ul>
+            </div>
+          )}
 
           {/* Scraping Progress */}
           {scraping && (
@@ -551,7 +590,7 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
             </button>
             <button
               onClick={handleStartScrape}
-              disabled={scraping || potentialResults.length === 0}
+              disabled={scraping || !hasRequiredFields || potentialResults.length === 0}
               className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {scraping ? (
@@ -562,7 +601,10 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
               ) : (
                 <>
                   <Play className="w-4 h-4 mr-2" />
-                  Start Scraping ({potentialResults.length} leads)
+                  {hasRequiredFields 
+                    ? `Start Scraping (${potentialResults.length} leads)`
+                    : 'Complete Configuration to Start'
+                  }
                 </>
               )}
             </button>
