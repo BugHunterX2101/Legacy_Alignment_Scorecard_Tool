@@ -530,7 +530,9 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
                   </div>
                 ))}
               </div>
-            ) : (
+            )}
+            
+            {potentialResults.length === 0 && hasRequiredFields && (
               <div className="text-center py-8">
                 <div className="text-gray-500 mb-2">
                   <Search className="w-12 h-12 mx-auto mb-3 opacity-50" />
