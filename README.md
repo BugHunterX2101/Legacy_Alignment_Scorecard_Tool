@@ -1,56 +1,77 @@
-Welcome to Saasquatchleads, a smart, user-focused lead generation platform that streamlines prospect discovery, filters high-impact leads, and transforms raw data into actionable sales opportunities. Designed for sales teams and marketers, it eliminates the noise and surfaces what matters most — qualified leads
+# 🦖 SaasquatchLeads
 
- Business-Aligned Lead Generation 
-Target Market Focused: Filters leads based on job title, domain, company size, and other strategic criteria aligned with real-world B2B sales workflows.
+**SaasquatchLeads** is a smart, user-focused lead generation platform that streamlines prospect discovery, filters high-impact leads, and transforms raw data into actionable sales opportunities. Built for sales teams and marketers, it cuts through the noise and surfaces what matters most — **qualified leads**.
 
-Intelligent Prioritization: Highlights high-impact leads by relevance and potential conversion likelihood.
+ **Live App**: [fantastic-toffee-55a6c3.netlify.app](https://fantastic-toffee-55a6c3.netlify.app/)
 
-Data Minimization: Eliminates redundant and irrelevant data points, presenting only key information needed for outreach.
+---
 
-Workflow Integration Ready: Export features designed for easy CRM ingestion (CSV format), ensuring seamless fit into existing pipelines.
+## Features
 
-Business Use Case Examples:
-Finding decision-makers (e.g., CTOs, Heads of Marketing) from specific industries.
+###  Business-Aligned Lead Generation
 
-Enabling SDRs to focus on qualified prospects without data noise.
+- **Target Market Focused**: Filters leads by job title, domain, company size, and other strategic B2B parameters.
+- **Intelligent Prioritization**: Highlights high-impact leads based on role, seniority, and relevance.
+- **Data Minimization**: Only shows critical lead information—no clutter, no noise.
+- **Workflow Integration Ready**: Export leads in CRM-friendly formats (CSV).
 
-Supporting Account-Based Marketing (ABM) campaigns with clean lead lists.
+#### Example Use Cases:
+- Discover CTOs and Heads of Marketing across tech companies.
+- Enable SDRs to focus only on sales-ready prospects.
+- Fuel ABM campaigns with clean, customized lead lists.
 
-User Experience & Interface 
-Minimalist Design: Clean UI that reduces friction—no clutter, no distractions.
+---
 
-Guided Navigation: Filter and search functionality is front and center to drive clarity in decision-making.
+###  User Experience & Interface
 
-Quick Export: One-click export for lead lists, designed for sales team speed and convenience.
+- **Minimalist Design**: Clean UI with zero distractions.
+- **Guided Navigation**: Centralized filtering, fast access to data.
+- **Quick Export**: One-click CSV downloads.
+- **No-Code Friendly**: Built for everyone—no technical setup needed.
 
-No-Code Friendly: Designed for non-technical users, with intuitive flow and feedback.
+---
 
-Technical Architecture (10/10)
-Smart Data Extraction: Efficient parsing from multiple public web sources (e.g., LinkedIn-like structures).
+###  Technical Architecture
 
-Scalable Architecture: Can handle large datasets and complex query filtering.
+- **Smart Data Extraction**: Efficient parsing from public web sources (e.g., LinkedIn-style structures).
+- **Scalable Backend**: Designed to handle large datasets and complex filter queries.
+- **Data Cleaning**: Automated deduplication and formatting.
+- **Resilient Logic**: Built-in strategies for CAPTCHA/IP management via cloud proxies.
 
-Data Cleaning: Built-in deduplication and data formatting for consistency.
+---
 
-Adaptive Logic: Resilient to minor structural changes in source sites and prepared for CAPTCHA/IP-based blockers (cloud proxy ready).
+### Visual Design
 
-Design and Visual Aesthetics (5/5)
-Modern UI Stack: Built with React + Tailwind for sleek, responsive interface.
+- **Modern Stack**: Built with **React** + **Tailwind CSS**.
+- **Visual Clarity**: Key actions and filters are emphasized with layout and color.
+- **Optional Dark Mode**: (Roadmap enhancement).
+- **Accessible Typography**: Designed for legibility across screen sizes.
 
-Visual Clarity: Key actions and filters are visually distinguished using color and spacing.
+---
 
-Dark/Light Mode Ready (optional enhancement).
+###  Bonus: Innovation & Thoughtfulness
 
-Accessible Typography: Font and spacing choices are optimized for readability across devices.
+- ✅ **CRM-Ready** Exports
+- ✅ **Ethical Scraping** (Only public B2B data)
+- ✅ **Auto Insights** *(Planned)*: Lead scoring, company-level enrichment
+- ✅ **Clear Documentation**: UI guidance + feedback built-in
 
-Bonus: Innovation & Thoughtfulness 
-CSV + CRM Compatibility: Export format aligns with most CRMs, enabling smooth integration.
+---
 
-Ethical Scraping: Respects rate limits and privacy norms—scraping only publicly available B2B data.
+##  Tech Stack
 
-Auto Insights (Optional Roadmap): Plans to integrate lead scoring and company-level insights.
+| Tech         | Purpose                          |
+|--------------|----------------------------------|
+| React        | Frontend UI                      |
+| Tailwind CSS | Responsive, modern styling       |
+| Netlify      | Hosting and CI/CD                |
+| JavaScript   | Core scripting & filtering logic |
 
-Well-Documented: Clear UI + roadmap (this README) + error feedback = zero guesswork for users.
+---
 
+##  Getting Started
 
-
+1. **Clone this repo**
+   ```bash
+   git clone https://github.com/your-username/saasquatchleads.git
+   cd saasquatchleads
