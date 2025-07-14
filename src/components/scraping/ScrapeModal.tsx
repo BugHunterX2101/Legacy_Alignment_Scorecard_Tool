@@ -45,7 +45,8 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
     totalCount: 0,
     currentLead: ''
   });
-  const [potentialResults, setPotentialResults] = useState<any[]>([]);
+  const [searchExecuted, setSearchExecuted] = useState(false);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
 
   // Massive expanded lead database with 150+ leads across all industries and sizes
   const expandedLeadDatabase = [
@@ -1249,9 +1250,7 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
 
   // Enhanced filtering logic
   const filterLeads = (leads: any[]) => {
-    if (!hasRequiredFields) {
-      return [];
-    }
+    if (!searchExecuted) return [];
     
     return leads.filter(lead => {
       const matchesQuery = !filters.searchQuery || 
@@ -1281,11 +1280,15 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
     });
   };
 
-  // Update potential leads when filters change
-  useEffect(() => {
-    const filtered = filterLeads(expandedLeadDatabase);
-    setPotentialResults(filtered);
-  }, [filters, hasRequiredFields]);
+  const potentialResults = searchResults;
+
+  const handleStartSearch = () => {
+    if (!hasRequiredFields) return;
+    
+    setSearchExecuted(true);
+    const results = filterLeads(expandedLeadDatabase);
+    setSearchResults(results);
+  };
 
   // Handle filter changes
   const updateFilter = (key: keyof ScrapeFilters, value: string) => {
@@ -1645,7 +1648,7 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
           )}
 
           {/* Potential Results Preview */}
-          {hasRequiredFields && potentialResults.length > 0 && (
+          {searchExecuted && potentialResults.length > 0 && (
             <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
@@ -1732,7 +1735,7 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
           )}
 
           {/* No Results Message */}
-          {hasRequiredFields && potentialResults.length === 0 && (
+          {searchExecuted && potentialResults.length === 0 && (
             <div className="mb-6 p-6 bg-gray-50 rounded-lg border border-gray-200">
               <div className="text-center">
                 <Search className="w-12 h-12 mx-auto mb-3 text-gray-400" />
@@ -1740,6 +1743,15 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
                 <p className="text-sm text-gray-600">
                   Try adjusting your search filters to find more results
                 </p>
+                <button
+                  onClick={() => {
+                    setSearchExecuted(false);
+                    setSearchResults([]);
+                  }}
+                  className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Modify Search
+                </button>
               </div>
             </div>
           )}
@@ -1782,7 +1794,7 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
           {/* Action Buttons */}
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500">
-              {hasRequiredFields && potentialResults.length > 0 && (
+              {hasRequiredFields && searchExecuted && potentialResults.length > 0 && (
                 <span>Ready to scrape {potentialResults.length} qualified leads</span>
               )}
             </div>
@@ -1805,14 +1817,18 @@ export const ScrapeModal: React.FC<ScrapeModalProps> = ({ isOpen, onClose, onCom
                 </button>
               ) : (
                 <button
-                  onClick={handleStartScrape}
-                  disabled={!hasRequiredFields || potentialResults.length === 0}
+                  onClick={!searchExecuted ? handleStartSearch : handleStartScrape}
+                  disabled={!hasRequiredFields || (searchExecuted && potentialResults.length === 0)}
                   className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Play className="w-4 h-4 mr-2" />
-                  {hasRequiredFields && potentialResults.length > 0
-                    ? `Start Scraping (${potentialResults.length} leads)`
-                    : 'Complete Configuration to Start'
+                  {!hasRequiredFields 
+                    ? 'Complete Configuration First'
+                    : !searchExecuted
+                      ? 'Start Search'
+                      : potentialResults.length === 0 
+                        ? 'No Leads Found' 
+                        : `Start Smart Scrape (${potentialResults.length} leads)`
                   }
                 </button>
               )}
